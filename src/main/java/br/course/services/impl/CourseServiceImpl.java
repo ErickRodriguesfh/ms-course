@@ -9,6 +9,9 @@ import br.course.repositories.ModuleRepository;
 import br.course.services.CourseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,8 +53,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseModel> findAll() {
-        return repository.findAll();
+    public Page<CourseModel> findAll(Specification<CourseModel> spec, Pageable pageable) {
+        return repository.findAll(spec, pageable);
     }
 
 }

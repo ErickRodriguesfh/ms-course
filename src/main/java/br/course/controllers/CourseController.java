@@ -3,13 +3,17 @@ package br.course.controllers;
 import br.course.dto.CourseDto;
 import br.course.models.CourseModel;
 import br.course.services.CourseService;
+import br.course.specifications.SpecificationTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,8 +59,9 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseModel>> findAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(courseService.findAll());
+    public ResponseEntity<Page<CourseModel>> findAll(SpecificationTemplate.CourseSpec spec,
+                                                     @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(courseService.findAll(spec, pageable));
     }
 
     @GetMapping("/{courseId}")
@@ -67,6 +72,5 @@ public class CourseController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(courseModelOptional.get());
     }
-
 
 }
